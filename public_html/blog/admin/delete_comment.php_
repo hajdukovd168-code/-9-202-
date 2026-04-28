@@ -1,0 +1,13 @@
+<?php
+require_once '../config/db.php';
+header('Content-Type: application/json');
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    echo json_encode(['success' => false]);
+    exit;
+}
+$data = json_decode(file_get_contents('php://input'), true);
+$id = (int)$data['id'];
+$stmt = $pdo->prepare("DELETE FROM comments WHERE id = ?");
+$result = $stmt->execute([$id]);
+echo json_encode(['success' => $result]);
+?>
